@@ -1,8 +1,9 @@
-# 실전 문제 2: 도시 분할 계획
+# 실전 문제 2: 도시 분할 계획 (이거 사실 백준 1647번)
 # 집의 갯수 N, 길의 갯수 M (2 <= N <= 10만 / 1 <= M <= 100만)
 # --> 주어진 입력에 대해서.. 2개의 "최소 신장 트리"를 만들어라 (크루스칼 알고리즘을 써야 함)
 # --> 일단, 전체 정보에 관해서 1개의 "최소 신장 트리"를 만들고, 거기에서 가장 비용이 큰 경로를 짤라내면, 그게 최솟값!
-from collections import deque
+import sys
+input = sys.stdin.readline
 
 def find_parent(parent, x):
   if parent[x] != x:
@@ -45,3 +46,6 @@ for edge in edges: # 하나씩 꺼내면서 찾는다
     last = cost # 최소 신장 트리를 구하는 크루스칼 알고리즘은.. 결국 cost를 오름차순으로 탐색하기 때문에.. 여기엔 무조건 트리 안에 있는 간선 가중치 중 가장 큰 값이 저장될 것이다
 
 print(total_cost - last) # 이것이.. 원하는 값
+
+# 유의사항
+# --> Python에서.. 입력하는 크기가 10만을 넘어가거나 그렇다면.. input을 sys.stdin.readline으로 쓰세요
