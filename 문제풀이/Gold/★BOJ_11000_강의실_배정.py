@@ -32,6 +32,9 @@
 
 # ========== 정답 코드는 아래와 같다 =============
 import heapq
+import sys
+input = sys.stdin.readline
+
 n = int(input())
 
 q = []
