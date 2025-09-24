@@ -4,10 +4,10 @@ from collections import deque
 
 n, m = map(int, input().split()) # 행, 열
 board = []
-visited = []
+visited = set()
 
 for _ in range(n): # n개의 행에 대해 입력 받기
-  row = list(map(int, input().split()))
+  row = list(input().strip()) # 문자열 입력 받을 땐 유의하자
   board.append(row)
 
 dx = [1, -1, 0, 0]
@@ -28,9 +28,10 @@ def getPos(): # 각 공의 위치 반환
 def move(x, y, dx, dy): # 구슬을 움직이기 위한 함수 move
   cnt = 0
   # 이동하는 위치가 벽이 아니고, 구멍에 들어가지 않을 동안 반복
-  while board[x + dx][y + dy] == '#' and board[x][y] != 'O':
+  while board[x + dx][y + dy] != '#' and board[x][y] != 'O':
     x += dx
     y += dy
+    cnt += 1 # 갯수 증가
   return x, y, cnt
 
 def BFS():
@@ -38,7 +39,7 @@ def BFS():
 
   q = deque()
   q.append((rx, ry, bx, by, 1))
-  visited.append((rx, ry, bx, by)) # 방문한 것에 대해 튜플로 넣기
+  visited.add((rx, ry, bx, by)) # 방문한 것에 대해 튜플로 넣기
 
   while q: # q가 빌 때까지
     rx, ry, bx, by, result = q.popleft()
@@ -70,8 +71,8 @@ def BFS():
       
       # 탐색하지 않은 방향 탐색
       if (nrx, nry, nbx, nby) not in visited:
-        visited.append((nrx, nry, nbx, nby))
-      q.append((nrx, nry, nbx, nby, result+1))
+        visited.add((nrx, nry, nbx, nby))
+        q.append((nrx, nry, nbx, nby, result+1))
   
   # 여기 나온거면, 못 찾은거임
   print(-1)
