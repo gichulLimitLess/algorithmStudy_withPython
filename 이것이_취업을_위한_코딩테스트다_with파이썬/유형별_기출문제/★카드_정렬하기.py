@@ -5,19 +5,21 @@
 import heapq
 
 n = int(input())
-num_list = []
+heap = []
 
+# heap에 초기 카드 묶음을 모두 삽입
 for _ in range(n):
-  num_list.append(int(input()))
+  data = int(input())
+  heapq.heappush(heap, data)
 
 total = 0
-num_list.sort() # 오름차순으로 우선 정렬해 놓는다
-while len(num_list) != 1: # num_list의 길이가 1이 아닐 때까지 반복
-  a = heapq.heappop(num_list) # 우선순위 1순위를 빼낸다
-  b = heapq.heappop(num_list) # 우선순위 2순위를 빼낸다
+
+while len(heap) != 1: # heap의 길이가 1이 아닐 때까지 반복
+  a = heapq.heappop(heap) # 우선순위 1순위를 빼낸다
+  b = heapq.heappop(heap) # 우선순위 2순위를 빼낸다
   res = a + b
   total += res # total에 넣어 놓는다
-  heapq.heappush(num_list, res) # 더한 값을 넣어 놓는다
+  heapq.heappush(heap, res) # 더한 값을 넣어 놓는다
 
 print(total) # 결과 출력
 
