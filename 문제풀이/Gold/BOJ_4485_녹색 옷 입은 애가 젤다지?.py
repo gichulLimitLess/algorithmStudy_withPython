@@ -11,8 +11,7 @@ def dijkstra(board, start): # 다익스트라 수행 함수
     distance = [[INF for _ in range(n)] for _ in range(n)]
     q = []
     heapq.heappush(q, (board[start[0]][start[1]], start)) # (비용, 좌표)를 우선순위 큐에 넣기
-    distance[start[0]][start[1]] = board[start[0]][start[1]]
- # 맨 처음은 이렇게 초기화해 주어야 한다
+    distance[start[0]][start[1]] = board[start[0]][start[1]] # 맨 처음은 이렇게 초기화해 주어야 한다
 
     while q:
         dist, now = heapq.heappop(q)
