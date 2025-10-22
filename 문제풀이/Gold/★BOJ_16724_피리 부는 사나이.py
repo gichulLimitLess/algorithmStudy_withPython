@@ -71,30 +71,38 @@
 
 # ======================== 정답 코드 =============================
 import sys
-sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
 
 n, m = map(int, input().split())
 board = [list(input().strip()) for _ in range(n)]
-visited = [[0]*m for _ in range(n)]  # 0: 미방문, 1: 탐색중, 2: 탐색완료
+visited = [[0]*m for _ in range(n)]
+group_id = 0
 cnt = 0
 
-dy = {'U': -1, 'D': 1, 'L': 0, 'R': 0}
-dx = {'U': 0, 'D': 0, 'L': -1, 'R': 1}
-
-def dfs(y, x):
-    global cnt
-    visited[y][x] = 1  # 탐색 중
-    ny = y + dy[board[y][x]]
-    nx = x + dx[board[y][x]]
-    if visited[ny][nx] == 0:
-        dfs(ny, nx)
-    elif visited[ny][nx] == 1:  # 현재 탐색 중인 노드에 다시 도달
-        cnt += 1  # 사이클 발견
-    visited[y][x] = 2  # 탐색 완료
+dy = (-1, 1, 0, 0)
+dx = (0, 0, -1, 1)
+dir_map = {'U': 0, 'D': 1, 'L': 2, 'R': 3}
 
 for i in range(n):
     for j in range(m):
-        if visited[i][j] == 0:
-            dfs(i, j)
+        if visited[i][j]:
+            continue
+
+        group_id += 1
+        stack = [(i, j)]
+        # Python에서는 DFS 할 때, 재귀로 1차원적으로 무조건 깊어지면 메모리 터질 수 있음
+        # ---> 이럴 경우, 아래와 같은 반복문 구조로 리팩토링할 필요 있음!
+        while stack:
+            y, x = stack.pop()
+            visited[y][x] = group_id
+            d = dir_map[board[y][x]]
+            ny, nx = y + dy[d], x + dx[d]
+
+            if visited[ny][nx] == 0:
+                stack.append((ny, nx))
+            elif visited[ny][nx] == group_id:
+                cnt += 1
 
 print(cnt)
+
+
