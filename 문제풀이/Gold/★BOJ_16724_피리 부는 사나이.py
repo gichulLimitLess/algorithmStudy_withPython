@@ -70,3 +70,31 @@
 # print(len(safeZone_loc)) # 여기에 저장되어 있는 safeZone_loc의 길이가 결국 'SAFE ZONE'의 최소 개수
 
 # ======================== 정답 코드 =============================
+import sys
+sys.setrecursionlimit(10**6)
+
+n, m = map(int, input().split())
+board = [list(input().strip()) for _ in range(n)]
+visited = [[0]*m for _ in range(n)]  # 0: 미방문, 1: 탐색중, 2: 탐색완료
+cnt = 0
+
+dy = {'U': -1, 'D': 1, 'L': 0, 'R': 0}
+dx = {'U': 0, 'D': 0, 'L': -1, 'R': 1}
+
+def dfs(y, x):
+    global cnt
+    visited[y][x] = 1  # 탐색 중
+    ny = y + dy[board[y][x]]
+    nx = x + dx[board[y][x]]
+    if visited[ny][nx] == 0:
+        dfs(ny, nx)
+    elif visited[ny][nx] == 1:  # 현재 탐색 중인 노드에 다시 도달
+        cnt += 1  # 사이클 발견
+    visited[y][x] = 2  # 탐색 완료
+
+for i in range(n):
+    for j in range(m):
+        if visited[i][j] == 0:
+            dfs(i, j)
+
+print(cnt)
