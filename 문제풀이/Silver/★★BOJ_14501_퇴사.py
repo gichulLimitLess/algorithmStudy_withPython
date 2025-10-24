@@ -10,3 +10,26 @@
     - "선택지 분기"로 점화식을 세우자
         -> DP의 점화식은 대부분 "선택지 중 최적해" 구조
 '''
+
+# 사실, 얘는 n이 최대 15이므로, 완전탐색 해도 상관 없다
+n = int(input())
+info_list = [tuple(map(int, input().split())) for _ in range(n)]
+max_benefit = 0
+
+def dfs(day, total):
+    global max_benefit
+
+    # dfs(재귀 호출)에서의 기저 조건
+    if day >= n:
+        max_benefit = max(max_benefit, total)
+        return
+
+    # 1. 상담을 진행하는 경우
+    if day + info_list[day][0] <= n:
+        dfs(day + info_list[day][0], total + info_list[day][1])
+
+    # 2. 상담을 하지 않고 다음 날로 넘어가는 경우
+    dfs(day + 1, total)
+
+dfs(0, 0)
+print(max_benefit)
