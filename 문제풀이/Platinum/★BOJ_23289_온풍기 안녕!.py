@@ -74,3 +74,128 @@
     [오답노트]
     --> 시뮬레이션은 제발.. 완벽주의로 가지 말고, "우선 그것이 비효율적인 것 같아도 시도해 보는 거다"
 '''
+
+from collections import deque
+R, C, K = map(int, input().strip().split())
+room = [list(map(int, input().strip().split())) for _ in range(R)]
+W = int(input())
+wall = []
+for _ in range(W):
+    x, y, t = map(int, input().strip().split())
+    wall.append((x-1, y-1, t))
+warm = [[0]*C for _ in range(R)]
+
+def can_go(h_num, dirx, diry, x, y):
+    go = True
+    if h_num == 1: # 오
+        if (dirx, diry) == (-1, 1) and ((x, y, 0) in wall or (x-1, y, 1) in wall): go = False
+        elif (dirx, diry) == (0, 1) and (x, y, 1) in wall: go = False
+        elif (dirx, diry) == (1, 1) and ((x+1, y, 0) in wall or (x+1, y, 1) in wall): go = False
+    elif h_num == 2: # 왼
+        if (dirx, diry) == (-1, -1) and ((x, y, 0) in wall or (x-1, y-1, 1) in wall): go = False
+        elif (dirx, diry) == (0, -1) and (x, y-1, 1) in wall: go = False
+        elif (dirx, diry) == (1, -1) and ((x+1, y, 0) in wall or (x+1, y-1, 1) in wall): go = False
+    elif h_num == 3: # 위
+        if (dirx, diry) == (-1, -1) and ((x, y-1, 0) in wall or (x, y-1, 1) in wall): go = False
+        elif (dirx, diry) == (-1, 0) and (x, y, 0) in wall: go = False
+        elif (dirx, diry) == (-1, 1) and ((x, y+1, 0) in wall or (x, y, 1) in wall): go = False
+    elif h_num == 4: # 아래
+        if (dirx, diry) == (1, -1) and ((x+1, y-1, 0) in wall or (x, y-1, 1) in wall): go = False
+        elif (dirx, diry) == (1, 0) and (x+1, y, 0) in wall: go = False
+        elif (dirx, diry) == (1, 1) and ((x+1, y+1, 0) in wall or (x, y, 1) in wall): go = False
+    return go
+
+def bfs(dx, dy, x, y, h_num):
+    check = [[0]*C for _ in range(R)]
+    q = deque()
+    nx, ny = 0, 0
+    if h_num == 1: nx, ny = x, y+1
+    elif h_num == 2: nx, ny = x, y-1
+    elif h_num == 3: nx, ny = x-1, y
+    elif h_num == 4: nx, ny = x+1, y
+    check[nx][ny] = 5
+    q.append(((nx, ny)))
+    while q:
+        x, y = q.popleft()
+        for i in range(3):
+            nx, ny = x+dx[i], y+dy[i]
+            if 0 <= nx < R and 0 <= ny < C and not check[nx][ny] and check[x][y] - 1 > 0 and can_go(h_num, dx[i], dy[i], x, y):
+                check[nx][ny] = check[x][y] - 1
+                q.append((nx, ny))
+    return check
+
+def heaters():
+    for r in range(R):
+        for c in range(C):
+            if 0 < room[r][c] < 5: # 온풍기인 경우
+                check = None
+                if room[r][c] == 1:
+                    check = bfs([-1, 0, 1], [1, 1, 1], r, c, 1)
+                elif room[r][c] == 2:
+                    check = bfs([-1, 0, 1], [-1, -1, -1], r, c, 2)
+                elif room[r][c] == 3:
+                    check = bfs([-1, -1, -1], [-1, 0, 1], r, c, 3)
+                elif room[r][c] == 4:
+                    check = bfs([1, 1, 1], [-1, 0, 1], r, c, 4)
+
+                for i in range(R):
+                    for j in range(C):
+                        warm[i][j] += check[i][j]
+
+def change_temp():
+    dx, dy = [-1, 1, 0, 0], [0, 0, 1, -1]
+    change_warm = [[0]*C for _ in range(R)]
+    for i in range(R):
+        for j in range(C):
+            for k in range(4):
+                nx, ny = i+dx[k], j+dy[k]
+                if 0<=nx<R and 0<=ny<C:
+                    if (dx[k], dy[k]) == (0, 1) and (i, j, 1) in wall: continue
+                    elif (dx[k], dy[k]) == (0, -1) and (i, j-1, 1) in wall: continue
+                    elif (dx[k], dy[k]) == (-1, 0) and (i, j, 0) in wall: continue
+                    elif (dx[k], dy[k]) == (1, 0) and (i+1, j, 0) in wall: continue
+                    if warm[i][j] > warm[nx][ny]:
+                        ch = (warm[i][j] - warm[nx][ny]) // 4
+                        change_warm[i][j] -= ch
+                        change_warm[nx][ny] += ch
+    for i in range(R):
+        for j in range(C):
+            warm[i][j] += change_warm[i][j]
+
+def down_temp():
+    for i in range(R):
+        for j in range(C):
+            if i == 0 or j == 0 or i == R-1 or j == C-1:
+                if warm[i][j]:
+                    warm[i][j] -= 1
+
+def check_to_stop():
+    flag = True
+    for i in range(R):
+        for j in range(C):
+            if room[i][j] == 5 and warm[i][j] < K:
+                flag = False
+                break
+    return flag
+
+ans = 0
+while True:
+    if ans > 100:
+        break
+    heaters()
+    change_temp()
+    ans += 1
+    down_temp()
+    if check_to_stop():
+        break
+print(ans)
+
+'''
+    ======== 앞으로 시뮬레이션 문제 풀 때 사고 루프 ========
+    1. 현상 분리 (무엇이 일어나는가)
+    2. 상태 분리 (어디에 저장되는가 --> 무슨 자료구조 쓸지.. 어떻게 상태 저장할 것인지..)
+    3. 순서 정의 (언제 일어나는가 --> 동시에 처리되고 이러는 거.. 잘 고려해라)
+    4. 조건 해석 (어떻게 제한되는가)
+'''
+
+# 출처: https://jjujju31.tistory.com/80 [현재를 가치있게 쓰자:티스토리]
