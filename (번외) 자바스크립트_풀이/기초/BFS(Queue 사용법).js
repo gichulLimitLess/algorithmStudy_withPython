@@ -4,9 +4,15 @@ class Queue {
     this.q = [];
     this.head = 0;
   }
-  enqueue(x) { this.q.push(x); } // queue에 요소 삽입
-  dequeue() { return this.q[this.head++]; } // queue에 요소 제거
-  isEmpty() { return this.head >= this.q.length; } // 비어 있는지 확인
+  enqueue(x) {
+    this.q.push(x);
+  } // queue에 요소 삽입
+  dequeue() {
+    return this.q[this.head++];
+  } // queue에 요소 제거
+  isEmpty() {
+    return this.head >= this.q.length;
+  } // 비어 있는지 확인
 }
 
 function bfs(start, graph) {

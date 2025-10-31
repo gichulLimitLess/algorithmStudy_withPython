@@ -11,11 +11,11 @@ function dfs(node, graph, visited) {
 }
 
 const graph = [
-  [],         // 0번 인덱스 사용 안 함
+  [], // 0번 인덱스 사용 안 함
   [2, 3],
   [1, 4],
   [1, 4],
-  [2, 3]
+  [2, 3],
 ];
 const visited = Array(graph.length).fill(false);
 dfs(1, graph, visited);
@@ -27,8 +27,6 @@ dfs(1, graph, visited);
 	4
 	3
 */
-
-
 
 /* 2. DFS 구현 - "Stack" 방식(반복문 사용) */
 function dfsStack(start, graph) {
@@ -49,11 +47,5 @@ function dfsStack(start, graph) {
   }
 }
 
-const graph = [
-  [],
-  [2, 3],
-  [1, 4],
-  [1, 4],
-  [2, 3]
-];
-dfsStack(1, graph);
+const graph2 = [[], [2, 3], [1, 4], [1, 4], [2, 3]];
+dfsStack(1, graph2);

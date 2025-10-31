@@ -1,8 +1,8 @@
-const arr = [1, 30, 4, 21, 10000]
+const arr = [1, 30, 4, 21, 10000];
 // 숫자 정렬할 때는 기본적으로 아래와 같이 정렬 시켜야 함
 // --> js에서는 기본적으로 sort()를 쓰면, "문자열" 기준으로 정렬됨
-arr.sort((a, b) => a-b); // 오름차순 정렬
-arr.sort((a, b) => b-a); // 내림차순 정렬
+arr.sort((a, b) => a - b); // 오름차순 정렬
+arr.sort((a, b) => b - a); // 내림차순 정렬
 
 // 오름차순 정렬 예시
 const nums = [5, 2, 9, 1];
@@ -10,7 +10,7 @@ nums.sort((a, b) => a - b);
 console.log(nums); // [1, 2, 5, 9]
 
 // 내림차순 정렬 예시
-const nums = [5, 2, 9, 1];
+const nums2 = [5, 2, 9, 1];
 nums.sort((a, b) => b - a);
 console.log(nums); // [9, 5, 2, 1]
 
@@ -18,7 +18,7 @@ console.log(nums); // [9, 5, 2, 1]
 const users = [
   { name: "Junho", age: 24 },
   { name: "Min", age: 19 },
-  { name: "Hana", age: 22 }
+  { name: "Hana", age: 22 },
 ];
 
 // 나이 기준 오름차순
