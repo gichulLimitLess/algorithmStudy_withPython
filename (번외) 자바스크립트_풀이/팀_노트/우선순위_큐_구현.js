@@ -5,9 +5,10 @@
 */
 
 class PriorityQueue {
-  constructor() {
+  constructor(compareFn = (a, b) => a - b) {
     // 2차원 트리를 선형적인 배열로 구현 가능
     this.heap = [];
+    this.compare = compareFn; // 비교 함수 저장
   }
 
   size() {
@@ -28,19 +29,19 @@ class PriorityQueue {
   heapifyUp() {
     // "최소 힙" 원칙에 따라 정렬
     let i = this.size() - 1;
-    const lastNode = this.heap[i];
+    const node = this.heap[i];
 
     while (i > 0) {
       const parentIndex = Math.floor((i - 1) / 2); // 자기 자신의 index에서 -1하고 나누기 2 하면 부모 index임
-      if (this.heap[parentIndex] > lastNode) {
-        // 부모가 lastNode보다 크다면 --> 바꿔야 한다
+      if (this.compare(node, this.heap[parentIndex]) < 0) {
+        // 부모가 node보다 크다면 --> 바꿔야 한다
         this.heap[i] = this.heap[parentIndex]; // parentIndex에 있는 친구를 heap[i](--> 자식)으로 내린다
         i = parentIndex;
       } else {
         // 이미 부모가 자식보다 작거나 같은 경우 --> 최소 힙 이미 만족 중임
         break;
       }
-      this.heap[i] = lastNode; // lastNode를 부모에 넣는다
+      this.heap[i] = node; // node를 부모에 넣는다
     }
   }
 
@@ -74,7 +75,7 @@ class PriorityQueue {
       let rightChildIndex = i * 2 + 2;
       if (leftChildIndex < heapSize) {
         // heapSize보다 leftChildIndex보다 작으면 --> 유효한 범위!
-        if (this.heap[leftChildIndex] < this.heap[i]) {
+        if (this.compare(this.heap[leftChildIndex], this.heap[i]) < 0) {
           // 대상이 왼쪽 자식보다 크다면, 왼쪽 자식 인덱스를 바꿔야할 인덱스로 지정해야 한다
           swapIndex = leftChildIndex;
         }
@@ -83,8 +84,9 @@ class PriorityQueue {
       if (rightChildIndex < heapSize) {
         // heapSize보다 rightChildIndex보다 작으면 --> 유효한 범위!
         if (
-          (swapIndex === null && this.heap[rightChildIndex] < this.heap[i]) ||
-          (swapIndex !== null && this.heap[rightChildIndex] < this.heap[leftChildIndex])
+          (swapIndex === null && this.compare(this.heap[rightChildIndex], this.heap[i]) < 0) ||
+          (swapIndex !== null &&
+            this.compare(this.heap[rightChildIndex], this.heap[leftChildIndex]) < 0)
         ) {
           // 바꿔야할 인덱스가 지정된 값이 없고, 대상이 오른쪽 자식보다 크거나,
           // 바꿔야할 인덱스가 왼쪽으로 지정되어 있지만, 왼쪽 자식이 오른쪽 자식보다 크다면
@@ -112,3 +114,9 @@ console.log(q.dequeue()); // 결과: 1
 console.log(q.dequeue()); // 결과: 4
 console.log(q.dequeue()); // 결과: 5
 console.log(q.dequeue()); // 결과: 10
+
+const pq2 = new PriorityQueue((a, b) => a[0] - b[0]);
+pq2.enqueue([5, "A"]);
+pq2.enqueue([1, "B"]);
+pq2.enqueue([3, "C"]);
+console.log(pq2.dequeue()); // [1, "B"]
