@@ -11,9 +11,6 @@ function find_parent(parent, x) {
     parent[x] = root; // 궁극적으로 찾은 부모를 현재 parent에 넣는다
     x = next; // 지금 x 위에 있는 애를 찾으러 떠난다
   }
-  if (parent[x] !== x) {
-    parent[x] = find_parent(parent, parent[x]); // 경로 압축
-  }
   return root; // 궁극적인 부모를 return 해준다
 }
 
