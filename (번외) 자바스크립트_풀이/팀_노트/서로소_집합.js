@@ -1,8 +1,20 @@
+// 스택 오버플로 위험이 없는 "반복문" 형태로 작성 -> Path Compression 또한 수행하는 버전
 function find_parent(parent, x) {
+  let root = x;
+  while (parent[root] !== root) {
+    // 1. 현재 root가 root랑 같지 않다면 (자기 자신이 아니라면)
+    root = parent[root]; // 타고 올라가서, 궁극적인 부모를 찾는다
+  }
+  // 2. 경로 압축 밑에서부터 위로 하나씩 수행
+  while (parent[x] !== root) {
+    let next = parent[x];
+    parent[x] = root; // 궁극적으로 찾은 부모를 현재 parent에 넣는다
+    x = next; // 지금 x 위에 있는 애를 찾으러 떠난다
+  }
   if (parent[x] !== x) {
     parent[x] = find_parent(parent, parent[x]); // 경로 압축
   }
-  return parent[x];
+  return root; // 궁극적인 부모를 return 해준다
 }
 
 function union(parent, a, b) {
