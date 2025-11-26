@@ -58,7 +58,6 @@ B = [b for _, b in lines]
 # LIS를 위한 배열들
 d = []                  # LIS 배열 (값만)
 pos = [0] * n           # i번째 원소가 LIS에서 몇 번째 위치로 들어갔는지
-parent = [-1] * n       # LIS 연결 경로
 
 for i in range(n):
     b = B[i]
@@ -72,29 +71,14 @@ for i in range(n):
 
     pos[i] = idx
 
-    # parent 설정
-    if idx > 0:
-        # pos가 idx-1인 애 중 가장 마지막 i 이전 원소 찾기
-        # 뒤에서부터 탐색 (pos[i]==idx인 i는 증가)
-        for j in range(i - 1, -1, -1):
-            if pos[j] == idx - 1 and B[j] < b:
-                parent[i] = j
-                break
-
-# 실제 LIS 끝 인덱스 찾기
-lis_len = len(d)
-last = -1
-for i in range(n - 1, -1, -1):
-    if pos[i] == lis_len - 1:
-        last = i
-        break
-
 # LIS 경로 역추적
+lis = []
 lis_index = set()
-cur = last
-while cur != -1:
-    lis_index.add(cur)
-    cur = parent[cur]
+cnt = len(d)-1
+for i in range(n-1, -1, -1):
+    if cnt == pos[i]: # 현재 보고 있는 pos[i] 값이 cnt랑 같으면.. lis를 구성하는 원소 중 하나임
+        lis_index.add(i)
+        cnt -= 1
 
 # LIS에 포함되지 않은 A들을 정답으로 출력
 ans = []
