@@ -59,3 +59,45 @@ for t_config in tetromino:
                 max_val = max(total, max_val) # 최대 값 갱신
 
 print(max_val) # 테트로미노가 놓인 칸에 쓰인 수들의 합의 최대값 출력
+
+
+# ============ 해당 문제는 DFS로도 풀 수 있다 (아래는 그 풀이) ================
+import sys
+input = sys.stdin.readline
+
+def dfs(x,y,ans,cnt):
+    global maxValue
+
+    if cnt == 4:
+        maxValue = max(maxValue, ans)
+        return
+
+    for i in range(4):
+        nx = x + dx[i]
+        ny = y + dy[i]
+        if 0 <= nx < n and 0 <= ny < m and not visited[nx][ny]:
+            # 'ㅗ' 모양에 대해서는.. cnt가 2가 되는 순간 x,y에 대해서 dfs 돌리면.. 'ㅗ'의 회전형태가 나올 것임
+            if cnt == 2:
+                visited[nx][ny] = 1
+                dfs(x,y,ans+data[nx][ny],cnt + 1)
+                visited[nx][ny] = 0
+            # 나머지 모양들은 한붓그리기가 가능하므로.. nx, ny에 대해서 계속 dfs 돌리면 될 듯
+            visited[nx][ny] = 1
+            dfs(nx, ny, ans + data[nx][ny], cnt + 1)
+            visited[nx][ny] = 0
+
+n,m = list(map(int,input().split()))
+data = [list(map(int,input().split())) for _ in range(n)]
+maxValue = 0
+
+dx = [-1,0,0,1]
+dy = [0,1,-1,0]
+visited = [[False] * m for _ in range(n)]
+
+for i in range(n):
+    for j in range(m):
+        visited[i][j] = 1
+        dfs(i,j,data[i][j],1)
+        visited[i][j] = 0
+
+print(maxValue)
