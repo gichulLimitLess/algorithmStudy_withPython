@@ -1,15 +1,14 @@
 import sys
 input = sys.stdin.readline
-INF = int(1e9) # 무한을 의미하는 값으로 10억을 설정
+INF = int(1e9) # 무한을 의미하는 값으로 10억 설정
 
-# 노드의 개수(n), 간선의 개수(m)를 입력받기
+# 노드의 개수, 간선의 개수 입력 받기
 n, m = map(int, input().split())
 # 모든 간선에 대한 정보를 담는 리스트 만들기
 edges = []
 # 최단 거리 테이블을 모두 무한으로 초기화
-distance = [INF] * (n + 1)
-
-# 모든 간선 정보를 입력받기
+dist = [INF] * (n+1)
+# 모든 간선 정보 입력받기
 for _ in range(m):
     a, b, c = map(int, input().split())
     # a번 노드에서 b번 노드로 가는 비용이 c라는 의미
@@ -17,38 +16,37 @@ for _ in range(m):
 
 def bf(start):
     # 시작 노드에 대해서 초기화
-    distance[start] = 0
-    # 전체 n - 1번의 라운드(round)를 반복
+    dist[start] = 0
+    # 전체 n번의 라운드(round)를 반복
     for i in range(n):
-        # 매 반복마다 "모든 간선"을 확인하며
+        # 매 반복마다 '모든 간선'을 확인하며
         for j in range(m):
-            cur_node = edges[j][0]
-            next_node = edges[j][1]
-            edge_cost = edges[j][2]
+            cur = edges[j][0]
+            nxt = edges[j][1]
+            cost = edges[j][2]
             # 현재 간선을 거쳐서 다른 노드로 이동하는 거리가 더 짧은 경우
-            if distance[cur_node] != INF and distance[next_node] > distance[cur_node] + edge_cost:
-                distance[next_node] = distance[cur_node] + edge_cost
-                # n번째 라운드에서도 값이 갱신된다면 음수 순환이 존재
-                if i == n - 1:
+            if dist[cur] != INF and dist[nxt] > dist[cur] + cost:
+                dist[nxt] = dist[cur] + cost
+                # n번째 라운드에서도 값이 갱신 된다면, 음수 사이클이 존재하는 것임
+                if i == n-1:
                     return True
     return False
 
 # 벨만 포드 알고리즘을 수행
-negative_cycle = bf(1) # 1번 노드가 시작 노드
+negative_cycle = bf(1) # 여기선 1번 노드가 시작 노드
 
 if negative_cycle:
     print("-1")
 else:
-    # 1번 노드를 제외한 다른 모든 노드로 가기 위한 최단 거리를 출력
-    for i in range(2, n + 1):
+    # 1번 노드를 제외한 다른 모든 노드로 가기 위한 최단 거리 출력
+    for i in range(2, n+1):
         # 도달할 수 없는 경우, -1을 출력
-        if distance[i] == INF:
-            print("-1")
-        # 도달할 수 있는 경우 거리를 출력
+        if dist[i] == INF:
+            print('-1')
         else:
-            print(distance[i])
+            print(dist[i])
 
 # ======== 추가 사항 =========
 # 위 코드의 시간 복잡도는 O(V*E)
 # 다익스트라에 비해서 다른 점이라면, '음의 가중치'가 존재해도 사용할 수 있다는 점
-# ---> 그리고, '음의 사이클'을 탐지할 수 있다는 점! (음의 사이클이 존재할 경우, 최단 경로값을 구할수는 없음)
+# ---> 그리고, ★'음의 사이클'을 탐지할 수 있다는 점!★ (음의 사이클이 존재할 경우, 최단 경로값을 구할수는 없음)
