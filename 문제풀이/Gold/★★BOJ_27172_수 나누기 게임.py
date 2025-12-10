@@ -1,30 +1,4 @@
 # 수 나누기 게임
-'''
-    [풀이과정]
-    - 뭔가.. 나누어 떨어지는 느낌이 있다면.. 이거 '에라토스테네스의 체'를 이용하는 거 아닌가?
-'''
-# from math import sqrt
-#
-# n = int(input())
-# x_list = list(map(int, input().split()))
-#
-# # --> 여기 만드는 데.. 최악의 경우 O(10만*2)
-# is_Prime = [True for _ in range(max(x_list)+1)]
-# num_list = [0 for _ in range(max(x_list)+1)]
-#
-# # x_list에 있는 숫자 개수 기록 --> O(10만)
-# for x in x_list:
-#     num_list[x] += 1
-#
-# # 에라토스테네스의 체 활용 -> 그런데, "x_list"에 존재하는 수 기준으로만!
-# for i in range(1, int(sqrt(len(is_Prime)))+1):
-#     if is_Prime[i] and num_list[i] > 0: # 소수이고, 0개 이상 존재하는 수여야만 함
-#         r = 2
-#         while i * r < len(is_Prime): # i와 배수 관계에 있는 애들은 모두 "소수 아님" 처리
-#             is_Prime[i*r] = False
-#             r += 1
-
-# ------------ 아래는 정답 코드 -------------
 import sys
 input = sys.stdin.readline
 
