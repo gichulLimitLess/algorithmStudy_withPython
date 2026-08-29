@@ -1,2 +1,9 @@
 .idea
 .DS_Store
+
+# C/C++ 빌드 산출물
+*.o
+*.out
+*.exe
+*.dSYM/
+cpp_test/main
