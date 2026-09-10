@@ -2,6 +2,7 @@
 .DS_Store
 
 # C/C++ 빌드 산출물
+.bin/
 *.o
 *.out
 *.exe

@@ -1,51 +1,62 @@
 {
+    "version": "2.0.0",
+    "options": {
+        "cwd": "${fileDirname}"
+    },
+    "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "clear": true,
+        "showReuseMessage": false
+    },
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "C/C++: clang++ 활성 파일 빌드",
-            "command": "/usr/bin/clang++",
-            "args": [
-                "-std=gnu++17",
-                "-fcolor-diagnostics",
-                "-fansi-escape-codes",
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
+            "type": "shell",
+            "label": "C++: 빌드+실행",
+            "command": "mkdir -p .bin && /usr/bin/clang++ -std=gnu++17 -DLOCAL -g -I '${workspaceFolder}/cpp_test/include' -fcolor-diagnostics -fansi-escape-codes '${file}' -o '.bin/${fileBasenameNoExtension}' && echo '───── 실행 ─────' && './.bin/${fileBasenameNoExtension}'",
+            "problemMatcher": ["$gcc"],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "C++ 파일 빌드 (기본)"
+            "detail": "기본. input.txt를 표준입력으로 읽어서 바로 실행 (Cmd+Shift+B)"
         },
         {
-            "type": "cppbuild",
-            "label": "C/C++: clang 활성 파일 빌드",
-            "command": "/usr/bin/clang",
-            "args": [
-                "-fcolor-diagnostics",
-                "-fansi-escape-codes",
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
+            "type": "shell",
+            "label": "C++: 빌드+실행 (-O2 시간측정)",
+            "command": "mkdir -p .bin && /usr/bin/clang++ -std=gnu++17 -DLOCAL -O2 -I '${workspaceFolder}/cpp_test/include' -fcolor-diagnostics -fansi-escape-codes '${file}' -o '.bin/${fileBasenameNoExtension}' && echo '───── 실행 (-O2) ─────' && /usr/bin/time './.bin/${fileBasenameNoExtension}'",
+            "problemMatcher": ["$gcc"],
+            "group": "build",
+            "detail": "채점 서버와 동일한 -O2 최적화 + 실행 시간 측정. 시간초과 판단용"
+        },
+        {
+            "type": "shell",
+            "label": "C++: 빌드+실행 (Sanitizer)",
+            "command": "mkdir -p .bin && /usr/bin/clang++ -std=gnu++17 -DLOCAL -g -O1 -fsanitize=address,undefined -fno-omit-frame-pointer -I '${workspaceFolder}/cpp_test/include' -fcolor-diagnostics -fansi-escape-codes '${file}' -o '.bin/${fileBasenameNoExtension}.san' && echo '───── 실행 (Sanitizer) ─────' && './.bin/${fileBasenameNoExtension}.san'",
+            "problemMatcher": ["$gcc"],
+            "group": "build",
+            "detail": "배열 범위 초과·오버플로우 등 런타임 에러 원인을 줄 번호까지 찍어줌"
+        },
+        {
+            "type": "shell",
+            "label": "C++: 빌드 (디버그용)",
+            "command": "mkdir -p .bin && /usr/bin/clang++ -std=gnu++17 -DLOCAL -g -O0 -I '${workspaceFolder}/cpp_test/include' -fcolor-diagnostics -fansi-escape-codes '${file}' -o '.bin/${fileBasenameNoExtension}'",
+            "problemMatcher": ["$gcc"],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
             },
-            "problemMatcher": [
-                "$gcc"
-            ],
+            "detail": "F5 디버깅 전에 자동으로 실행되는 빌드 전용 태스크"
+        },
+        {
+            "type": "shell",
+            "label": "C: 빌드+실행",
+            "command": "mkdir -p .bin && /usr/bin/clang -std=c17 -DLOCAL -g '${file}' -o '.bin/${fileBasenameNoExtension}' && echo '───── 실행 ─────' && './.bin/${fileBasenameNoExtension}'",
+            "problemMatcher": ["$gcc"],
             "group": "build",
             "detail": "순수 C 파일 전용 (.c)"
         }
-    ],
-    "version": "2.0.0"
+    ]
 }

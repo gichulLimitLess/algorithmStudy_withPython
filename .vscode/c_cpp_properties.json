@@ -1,16 +1,22 @@
 {
+    "version": 4,
     "configurations": [
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/cpp_test/include"
             ],
-            "defines": [],
+            "defines": [
+                "LOCAL"
+            ],
             "compilerPath": "/usr/bin/clang++",
+            "compilerArgs": [
+                "-std=gnu++17"
+            ],
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-arm64"
         }
-    ],
-    "version": 4
+    ]
 }

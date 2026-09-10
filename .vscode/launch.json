@@ -1,18 +1,14 @@
 {
+    "version": "2.0.0",
     "configurations": [
         {
-            "name": "C/C++: clang++ 활성 파일 빌드 및 디버그",
-            "type": "cppdbg",
+            "name": "C++: 디버그 (CodeLLDB)",
+            "type": "lldb",
             "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "program": "${fileDirname}/.bin/${fileBasenameNoExtension}",
             "args": [],
-            "stopAtEntry": false,
             "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "lldb",
-            "preLaunchTask": "C/C++: clang++ 활성 파일 빌드"
+            "preLaunchTask": "C++: 빌드 (디버그용)"
         }
-    ],
-    "version": "2.0.0"
+    ]
 }
